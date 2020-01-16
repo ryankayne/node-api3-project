@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validatePostId, (req, res) => {
   // do your magic!
   const id = req.params.id;
 
@@ -71,6 +71,14 @@ router.put('/:id', (req, res) => {
 
 function validatePostId(req, res, next) {
   // do your magic!
+  Database.getById(req.params.id)
+    .then(post => {
+        if (!post) {
+        res.status(404).json({ message: "The post with the specified ID does not exist." });
+        } else {
+          next();
+        }
+  })
 }
 
 module.exports = router;

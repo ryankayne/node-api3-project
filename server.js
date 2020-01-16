@@ -2,9 +2,9 @@ const express = require('express');
 
 const server = express();
 
-const logger = require('./middleware/middleware.js');
-
 const postRouter = require('./posts/postRouter.js');
+
+const userRouter = require('./users/userRouter.js');
 
 server.use(express.json());
 
@@ -14,8 +14,15 @@ server.get('/', (req, res) => {
 
 //custom middleware
 
+function logger(req, res, next) {
+      console.log(`${req.method} ${req.originalUrl} at ${new Date().toISOString()}`);
+      next();
+    }
+
 server.use(logger);
 
 server.use('/api/posts', postRouter);
+
+server.use('/api/users', userRouter);
 
 module.exports = server;
